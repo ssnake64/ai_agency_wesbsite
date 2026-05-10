@@ -1,0 +1,7 @@
+export const marqueeItems = [
+  'BUILT_TO_AUTOMATE',
+  'SHIPPED_IN_DAYS_NOT_MONTHS',
+  'NO_LONG_CONTRACTS',
+  'MEASURABLE_OUTCOMES',
+  'HUMAN_REVIEWED',
+];
