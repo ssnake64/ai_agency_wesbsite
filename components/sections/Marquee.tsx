@@ -17,7 +17,7 @@ function Track({
     <div className="relative overflow-hidden">
       <div
         className={cn(
-          'flex w-max items-center gap-8 py-3 motion-reduce:animate-none',
+          'flex w-max items-center gap-10 py-5 md:py-7 motion-reduce:animate-none',
           direction === 'left' ? 'animate-marquee-left' : 'animate-marquee-right'
         )}
       >
@@ -25,12 +25,12 @@ function Track({
           <span
             key={i}
             className={cn(
-              'flex shrink-0 items-center gap-8 whitespace-nowrap text-base font-semibold uppercase tracking-[0.18em] md:text-lg',
+              'flex shrink-0 items-center gap-10 whitespace-nowrap text-xl font-semibold uppercase tracking-[0.18em] md:text-2xl lg:text-[26px]',
               textClass
             )}
           >
             {item}
-            <Star className="h-3.5 w-3.5 shrink-0" fill="currentColor" strokeWidth={0} />
+            <Star className="h-4 w-4 shrink-0 md:h-5 md:w-5" fill="currentColor" strokeWidth={0} />
           </span>
         ))}
       </div>
@@ -40,14 +40,14 @@ function Track({
 
 export function Marquee() {
   return (
-    <div className="relative isolate -my-3" aria-hidden>
+    <div className="relative isolate my-10" aria-hidden>
       <div className="relative">
         {/* Top lime bar */}
         <div className="relative -rotate-[4deg] origin-center bg-accent text-bg-dark">
           <Track items={marqueeItems} direction="left" textClass="text-bg-dark" />
         </div>
         {/* Bottom dark bar */}
-        <div className="relative -rotate-[4deg] origin-center bg-bg-dark text-white -mt-2">
+        <div className="relative -rotate-[4deg] origin-center bg-bg-dark text-white -mt-3">
           <Track items={marqueeItems} direction="right" textClass="text-white" />
         </div>
       </div>

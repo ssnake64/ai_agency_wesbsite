@@ -15,51 +15,45 @@ type CommonProps = {
 };
 
 const base =
-  'group inline-flex items-center gap-3 rounded-full font-medium tracking-wide transition-colors duration-200 focus-visible:outline-none disabled:opacity-50 disabled:pointer-events-none';
+  'group/btn relative inline-flex items-center rounded-full font-semibold tracking-wide transition-colors duration-200 focus-visible:outline-none disabled:opacity-50 disabled:pointer-events-none overflow-hidden';
 
-const sizes: Record<Size, string> = {
-  md: 'pl-5 pr-2 py-2 text-sm',
-  lg: 'pl-7 pr-3 py-3 text-base',
+const sizes: Record<
+  Size,
+  { container: string; text: string; chip: string; chipHover: string; icon: string }
+> = {
+  md: {
+    container: 'h-12',
+    // text padding: leave room for the chip on the right by default; on hover
+    // mirror the padding so the chip can sit on the left.
+    text:
+      'block text-[13px] uppercase tracking-[0.12em] pl-7 pr-[3.25rem] transition-[padding] duration-500 ease-[cubic-bezier(0.65,0,0.35,1)] motion-reduce:transition-none group-hover/btn:pl-[3.25rem] group-hover/btn:pr-7',
+    chip:
+      'absolute top-1/2 -translate-y-1/2 inline-flex items-center justify-center rounded-full transition-[right] duration-500 ease-[cubic-bezier(0.65,0,0.35,1)] motion-reduce:transition-none h-9 w-9 right-1.5',
+    chipHover: 'group-hover/btn:right-[calc(100%-2.625rem)]',
+    icon: 'h-3.5 w-3.5',
+  },
+  lg: {
+    container: 'h-[60px]',
+    text:
+      'block text-sm uppercase tracking-[0.14em] pl-8 pr-[4rem] transition-[padding] duration-500 ease-[cubic-bezier(0.65,0,0.35,1)] motion-reduce:transition-none group-hover/btn:pl-[4rem] group-hover/btn:pr-8',
+    chip:
+      'absolute top-1/2 -translate-y-1/2 inline-flex items-center justify-center rounded-full transition-[right] duration-500 ease-[cubic-bezier(0.65,0,0.35,1)] motion-reduce:transition-none h-12 w-12 right-1.5',
+    chipHover: 'group-hover/btn:right-[calc(100%-3.375rem)]',
+    icon: 'h-4 w-4',
+  },
 };
 
 const variants: Record<Variant, string> = {
-  primary:
-    'bg-bg-dark text-white hover:bg-ink',
-  ghost:
-    'border border-line bg-transparent text-ink hover:bg-bg-soft',
-  accent:
-    'bg-accent text-bg-dark hover:bg-accent-deep',
+  primary: 'bg-bg-dark text-white hover:bg-ink',
+  ghost: 'border border-line bg-transparent text-ink hover:bg-bg-soft',
+  accent: 'bg-accent text-bg-dark hover:bg-accent-deep',
 };
 
-const arrowWrap: Record<Variant, string> = {
-  primary: 'bg-accent text-bg-dark group-hover:bg-white',
-  ghost: 'bg-bg-dark text-white group-hover:bg-accent group-hover:text-bg-dark',
-  accent: 'bg-bg-dark text-accent group-hover:bg-white group-hover:text-bg-dark',
+const chipColors: Record<Variant, string> = {
+  primary: 'bg-accent text-bg-dark',
+  ghost: 'bg-bg-dark text-white',
+  accent: 'bg-bg-dark text-accent',
 };
-
-const arrowSize: Record<Size, string> = {
-  md: 'h-7 w-7',
-  lg: 'h-9 w-9',
-};
-
-const iconSize: Record<Size, string> = {
-  md: 'h-3.5 w-3.5',
-  lg: 'h-4 w-4',
-};
-
-function ArrowChip({ variant, size }: { variant: Variant; size: Size }) {
-  return (
-    <span
-      className={cn(
-        'inline-flex items-center justify-center rounded-full transition-colors duration-200',
-        arrowSize[size],
-        arrowWrap[variant]
-      )}
-    >
-      <ArrowUpRight className={iconSize[size]} strokeWidth={2.25} />
-    </span>
-  );
-}
 
 type LinkProps = CommonProps & AnchorHTMLAttributes<HTMLAnchorElement> & { href: string };
 type BtnProps = CommonProps & ButtonHTMLAttributes<HTMLButtonElement> & { href?: undefined };
@@ -72,11 +66,16 @@ export function Button(props: LinkProps | BtnProps) {
     children,
     className,
   } = props;
-  const cls = cn(base, sizes[size], variants[variant], className);
+  const s = sizes[size];
+  const cls = cn(base, s.container, variants[variant], className);
   const inner = (
     <>
-      <span className="uppercase">{children}</span>
-      {withArrow && <ArrowChip variant={variant} size={size} />}
+      <span className={s.text}>{children}</span>
+      {withArrow && (
+        <span className={cn(s.chip, s.chipHover, chipColors[variant])} aria-hidden>
+          <ArrowUpRight strokeWidth={2.25} className={s.icon} />
+        </span>
+      )}
     </>
   );
   if ('href' in props && props.href) {

@@ -14,7 +14,7 @@ export const faqs: FAQ[] = [
   },
   {
     q: 'How do you approach a new project?',
-    a: "A free audit call first. If we can build something with clear ROI, we'll quote a fixed setup fee and a monthly retainer. No long contracts.",
+    a: "A free audit call first. If we can build something with clear ROI, we'll quote a fixed-fee setup contract and a monthly retainer for ongoing care — clear scope, fair terms.",
   },
   {
     q: 'How long does it take to see results?',

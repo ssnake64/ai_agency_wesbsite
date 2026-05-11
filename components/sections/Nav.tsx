@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
-import { Button } from '@/components/ui/Button';
 import { Container } from '@/components/ui/Container';
 import { navLinks } from '@/content/nav';
 import { BRAND_NAME } from '@/content/brand';
@@ -29,25 +28,31 @@ export function Nav() {
           : 'bg-transparent'
       )}
     >
-      <Container className="flex items-center justify-between py-4">
+      <Container className="flex items-center justify-between py-5 md:py-6">
+        {/* Logo */}
         <Link
           href="#top"
-          className="flex items-center gap-2 text-display text-2xl tracking-wider text-ink"
+          className="group/logo flex items-center gap-3 text-display text-2xl tracking-wider text-ink md:text-[30px]"
         >
-          <span className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-accent">
-            <span className="block h-2.5 w-2.5 rounded-sm bg-bg-dark" />
+          <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-accent transition-transform duration-300 group-hover/logo:rotate-12 md:h-11 md:w-11">
+            <span className="block h-3.5 w-3.5 rounded-[3px] bg-bg-dark" />
           </span>
-          {BRAND_NAME}
+          <span className="font-bold">{BRAND_NAME}</span>
         </Link>
 
+        {/* Pill nav */}
         <nav className="hidden md:block">
-          <ul className="flex items-center gap-1 rounded-full border border-line bg-bg/60 px-2 py-1 backdrop-blur">
+          <ul className="flex items-center gap-1 rounded-full border border-line bg-bg/70 p-2 backdrop-blur">
             {navLinks.map((l) => (
               <li key={l.href}>
                 <Link
                   href={l.href}
-                  className="rounded-full px-4 py-2 text-sm font-medium text-ink-muted transition-colors hover:bg-bg-soft hover:text-ink"
+                  className="group/link relative inline-flex items-center rounded-full px-6 py-3 text-[15px] font-semibold text-ink-muted transition-colors duration-200 hover:text-bg-dark"
                 >
+                  <span
+                    aria-hidden
+                    className="absolute inset-0 -z-10 scale-90 rounded-full bg-accent opacity-0 transition-all duration-300 ease-out group-hover/link:scale-100 group-hover/link:opacity-100"
+                  />
                   {l.label}
                 </Link>
               </li>
@@ -55,22 +60,30 @@ export function Nav() {
           </ul>
         </nav>
 
+        {/* Right: Contact CTA + hamburger */}
         <div className="flex items-center gap-3">
-          <Button href="#contact" size="md" className="hidden sm:inline-flex">
+          {/* Lime "3D" pill: a flat-coloured shadow underneath gives the button
+              physical thickness; on hover it lifts to expose more of the edge,
+              on click it presses down into it. */}
+          <Link
+            href="#contact"
+            className="group/cta hidden items-center rounded-full bg-accent px-6 py-3 text-[13px] font-bold uppercase tracking-[0.14em] text-bg-dark shadow-[0_4px_0_0_#1A1A1A] transition-all duration-200 ease-out hover:-translate-y-0.5 hover:bg-accent-deep hover:shadow-[0_6px_0_0_#1A1A1A] active:translate-y-1 active:shadow-[0_1px_0_0_#1A1A1A] motion-reduce:transition-none sm:inline-flex"
+          >
             Contact Us
-          </Button>
+          </Link>
           <button
             type="button"
             aria-label={open ? 'Close menu' : 'Open menu'}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-line bg-bg text-ink transition-colors hover:bg-bg-soft md:h-11 md:w-11"
+            className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-line bg-bg text-ink transition-all duration-200 hover:bg-bg-dark hover:text-accent md:h-14 md:w-14"
           >
-            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" strokeWidth={2.25} />}
           </button>
         </div>
       </Container>
 
+      {/* Mobile drawer */}
       {open && (
         <div className="md:hidden border-t border-line bg-bg">
           <Container className="py-4">
@@ -80,16 +93,20 @@ export function Nav() {
                   <Link
                     href={l.href}
                     onClick={() => setOpen(false)}
-                    className="block rounded-xl px-4 py-3 text-base font-medium text-ink hover:bg-bg-soft"
+                    className="block rounded-xl px-4 py-3 text-base font-semibold text-ink hover:bg-bg-soft"
                   >
                     {l.label}
                   </Link>
                 </li>
               ))}
               <li className="pt-2">
-                <Button href="#contact" size="md" className="w-full justify-center">
+                <Link
+                  href="#contact"
+                  onClick={() => setOpen(false)}
+                  className="flex w-full items-center justify-center rounded-full bg-accent px-6 py-3 text-[13px] font-bold uppercase tracking-[0.14em] text-bg-dark shadow-[0_4px_0_0_#1A1A1A] transition-all duration-200 ease-out active:translate-y-1 active:shadow-[0_1px_0_0_#1A1A1A]"
+                >
                   Contact Us
-                </Button>
+                </Link>
               </li>
             </ul>
           </Container>
